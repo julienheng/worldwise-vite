@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createContext,
   useEffect,
@@ -8,16 +10,28 @@ import {
 
 const BASE_URL = "http://localhost:9000";
 
-const CitiesContext = createContext();
+const CitiesContext = createContext([]);
+
+interface State {
+  cities: any[];
+  isLoading: boolean;
+  currentCity: object;
+  error: string;
+}
+
+interface Action {
+  type: string;
+  payload: any;
+}
 
 const initialState = {
-  cities: [],
+  cities:[],
   isLoading: false,
   currentCity: {},
   error: "",
 };
 
-function reducer(state, action) {
+function reducer(state: State, action: Action) {
   switch (action.type) {
     case "loading":
       return { ...state, isLoading: true };
@@ -60,7 +74,11 @@ function reducer(state, action) {
   }
 }
 
-function CitiesProvider({ children }) {
+type Props = {
+  children: React.ReactNode;
+};
+
+function CitiesProvider({ children }: Props) {
   const [{ cities, isLoading, currentCity, error }, dispatch] = useReducer(
     reducer,
     initialState
@@ -68,7 +86,10 @@ function CitiesProvider({ children }) {
 
   useEffect(function () {
     async function fetchCities() {
-      dispatch({ type: "loading" });
+      dispatch({
+        type: "loading",
+        payload: undefined
+      });
 
       try {
         const res = await fetch(`${BASE_URL}/cities`);
@@ -85,10 +106,13 @@ function CitiesProvider({ children }) {
   }, []);
 
   const getCity = useCallback(
-    async function getCity(id) {
+    async function getCity(id: number) {
       if (Number(id) === currentCity.id) return;
 
-      dispatch({ type: "loading" });
+      dispatch({
+        type: "loading",
+        payload: undefined
+      });
 
       try {
         const res = await fetch(`${BASE_URL}/cities/${id}`);
@@ -104,8 +128,11 @@ function CitiesProvider({ children }) {
     [currentCity.id]
   );
 
-  async function createCity(newCity) {
-    dispatch({ type: "loading" });
+  async function createCity(newCity: object) {
+    dispatch({
+      type: "loading",
+      payload: undefined,
+    });
 
     try {
       const res = await fetch(`${BASE_URL}/cities`, {
@@ -126,8 +153,8 @@ function CitiesProvider({ children }) {
     }
   }
 
-  async function deleteCity(id) {
-    dispatch({ type: "loading" });
+  async function deleteCity(id: string) {
+    dispatch({ type: "loading", payload: undefined });
 
     try {
       await fetch(`${BASE_URL}/cities/${id}`, {
@@ -164,7 +191,7 @@ function useCities() {
   const context = useContext(CitiesContext);
   if (context === undefined)
     throw new Error("CitiesContext was used outside the CitiesProvider");
-  return context;
+  return context as any;
 }
 
 export { CitiesProvider, useCities };

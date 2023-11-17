@@ -1,4 +1,5 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigate } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
@@ -11,8 +12,8 @@ import {
 import styles from "./Map.module.css";
 import { useEffect, useState } from "react";
 import { useCities } from "../../contexts/CitiesContext";
-import { useGeolocation } from "../hooks/useGeolocation";
-import { useUrlPosition } from "../hooks/useUrlPosition";
+import { useGeolocation } from "../../hooks/useGeolocation";
+import { useUrlPosition } from "../../hooks/useUrlPosition";
 import Button from "./Button";
 
 function Map() {
@@ -58,7 +59,7 @@ function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
-        {cities.map((city) => (
+        {cities.map((city: any) => (
           <Marker
             position={[city.position.lat, city.position.lng]}
             key={city.id}
@@ -76,7 +77,11 @@ function Map() {
   );
 }
 
-function ChangeCenter({ position }) {
+type Props = {
+  position: number[];
+};
+
+function ChangeCenter({ position }: Props) {
   const map = useMap();
   map.setView(position);
   return null;
@@ -86,7 +91,7 @@ function DetectClick() {
   const navigate = useNavigate();
 
   useMapEvents({
-    click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
+    click: (e: any) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
   });
 }
 

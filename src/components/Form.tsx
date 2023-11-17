@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
 import { useEffect, useState } from "react";
@@ -8,7 +9,7 @@ import Button from "./Button";
 import BackButton from "./BackButton";
 
 import styles from "./Form.module.css";
-import { useUrlPosition } from "../hooks/useUrlPosition";
+import { useUrlPosition } from "../../hooks/useUrlPosition";
 import Message from "./Message";
 import Spinner from "./Spinner";
 import { useCities } from "../../contexts/CitiesContext";
@@ -18,7 +19,7 @@ export function convertToEmoji(countryCode) {
   const codePoints = countryCode
     .toUpperCase()
     .split("")
-    .map((char) => 127397 + char.charCodeAt());
+    .map((char: any) => 127397 + char.charCodeAt());
   return String.fromCodePoint(...codePoints);
 }
 
@@ -71,7 +72,7 @@ function Form() {
     [lat, lng]
   );
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!cityName || !date) return;
@@ -132,7 +133,7 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
-        <Button type="primary">Add</Button>
+        <Button onClick={} type="primary">Add</Button>
         <BackButton />
       </div>
     </form>

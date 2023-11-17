@@ -1,4 +1,5 @@
 import styles from "./City.module.css";
+import BackButton from "./BackButton";
 
 const formatDate = (date: string) =>
   new Intl.DateTimeFormat("en", {
@@ -30,7 +31,7 @@ function City() {
 
       <div className={styles.row}>
         <h6>You went to {cityName} on</h6>
-        <p>{formatDate(date || null)}</p>
+        <p>{formatDate(date)}</p>
       </div>
 
       {notes && (
@@ -52,7 +53,7 @@ function City() {
       </div>
 
       <div>
-        <ButtonBack />
+        <BackButton />
       </div>
     </div>
   );
